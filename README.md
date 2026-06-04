@@ -25,10 +25,10 @@ Sentence extraction
 Concept extraction (spaCy noun chunks + filtering)
       │
       ▼
-Co-occurrence graph (top concepts per chapter)
+Co-occurrence graph with PMI edge trimming (top concepts per chapter)
       │
       ▼
-Merged multi-chapter graph
+Combined multi-chapter graph
       │
       ▼
 Graph algorithms (PageRank, communities, shortest path)
@@ -75,9 +75,16 @@ I implemented and tested two approaches:
 **Why not use all concepts as nodes?**
 With 1647 concept candidates and only 277 triples, 75% of nodes were isolated — no edges. A graph you can't traverse isn't useful.
  
-**The fix — co-occurrence on top concepts:**
-Keep only the top N concepts per chapter. Connect any two that appear in the same sentence. This trades semantic precision for connectivity — the result is a navigable graph.
- 
+**The fix (almost) — co-occurrence on top concepts:**
+Keep only the top N concepts per chapter. Connect any two that appear in the same sentence. This trades semantic precision for connectivity — the result is a navigable graph, there still was major noise for words that appeared together and they were linked, it's a problem to address.
+
+**The fix - PMI edge trimming**
+To isolate true semantic associations from random accidental overlaps, we applied Pointwise Mutual Information (PMI) to score and prune our edges:
+
+$PMI(A,B) = log_2(\frac{P(A,B)}{P(A)P(B)})$ 
+
+By comparing the joint probability of two concepts appearing together $P(A, B)$ against the baseline probability of them landing in the same sentence by pure coincidence $P(A)P(B)$), we can filter out background noise. The higher the $PMI$ score, the tighter the semantic bond. This allowed us to aggressively prune arbitrary links while preserving the vital core infrastructure of our knowledge graph.
+
 **The honest tradeoff:**
 > "We just threw away our relationships so our edges are just connections without semantic meaning and precision." — notebook, cell 72
  
