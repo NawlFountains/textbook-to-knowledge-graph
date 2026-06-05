@@ -8,6 +8,14 @@ An end-to-end NLP pipeline that extracts domain concepts from technical textbook
  
 Textbooks hold rich relational information between concepts, but students have no way to navigate it structurally. 
 A student reading about *backpropagation* doesn't know what they need to understand first, or how it connects to everything else in the chapter. This project makes those connections explicit and queryable.
+
+---
+## Demo
+
+[**Try the live app**](https://textbook-to-knowledge-graph.streamlit.app/)
+
+![Textbook to Knowledge Graph demo](assets/demo.gif)
+
  
 ---
  
